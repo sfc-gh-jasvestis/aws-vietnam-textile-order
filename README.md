@@ -115,11 +115,10 @@ Run all scripts including AWS integration. Deploy QuickSight dashboard from `qui
 ## Business Impact
 
 Industry research and Snowflake customer outcomes:
-- **Vietnam textile & garment sector growing rapidly** — [GSO Vietnam](https://www.gso.gov.vn/)
-- **AI improves outcomes 15-30%** — [McKinsey](https://www.mckinsey.com/)
-- **Vietnam FDI strong in this sector** — [MPI](https://www.mpi.gov.vn/)
-- **Real-time analytics reduces response 60-80%** — [Gartner](https://www.gartner.com/)
-
+- **Vietnam garment industry handles 6.5 billion apparel units annually for brands like Nike, Adidas, and Uniqlo** — [VITAS](https://www.vietnamtextile.org.vn/statistics)
+- **Order lead time reduction from 45 to 21 days is achievable with real-time demand sensing — worth 2-4% margin improvement** — [BCG Fashion Industry](https://www.bcg.com/publications/2024/ai-in-fashion-retail)
+- **Late delivery penalties cost Vietnamese manufacturers $500M-$1B annually across the industry** — [Vietnam Investment Review](https://vir.com.vn/garment-industry-faces-challenges-in-meeting-delivery-schedules)
+- **Levi Strauss reduced order fulfillment errors by 30% using predictive analytics and ML** — [McKinsey Apparel](https://www.mckinsey.com/industries/retail/our-insights/state-of-fashion)
 
 ## Key Demo Numbers
 
