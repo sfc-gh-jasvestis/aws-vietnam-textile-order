@@ -119,6 +119,7 @@ Industry research and Snowflake customer outcomes:
 - **Order lead time reduction from 45 to 21 days is achievable with real-time demand sensing — worth 2-4% margin improvement** — [BCG Fashion Industry](https://www.bcg.com/publications/2024/ai-in-fashion-retail)
 - **Late delivery penalties cost Vietnamese manufacturers $500M-$1B annually across the industry** — [Vietnam Investment Review](https://vir.com.vn/)
 - **Levi Strauss reduced order fulfillment errors by 30% using predictive analytics and ML** — [McKinsey Apparel](https://www.mckinsey.com/industries/retail/our-insights/state-of-fashion)
+- **Under Armour** (Snowflake customer): consolidated global supply chain data on Snowflake, reducing time-to-insight from weeks to minutes across 35K retail doors -- [snowflake.com/customers/under-armour](https://www.snowflake.com/en/customers/all-customers/case-study/under-armour/)
 
 ## Key Demo Numbers
 
