@@ -32,15 +32,22 @@ export default function HomePage() {
       .catch(() => {});
   }, []);
 
+
+  // KPI values come from /api/data, which reads CURATED.KPI_SUMMARY. The literal
+  // stays as a fallback so the card still renders if the API is unavailable.
+  const kpiVal = (title: string, fallback: string): string =>
+    (data?.kpiCards as { title: string; value: string }[] | undefined)
+      ?.find((k) => k.title === title)?.value ?? fallback;
+
   const title = narrative?.title || 'SEA AWS Demo';
 
   const executiveCockpit = (
     <div className="space-y-6">
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <KPICard title="Order Book Value" value="₫4.8T" status="neutral" />
-        <KPICard title="On-Time Delivery" value="91%" status="warning" />
-        <KPICard title="Active Orders" value="1,247" status="neutral" />
-        <KPICard title="Customers" value="87" status="neutral" />
+        <KPICard title="Order Book Value" value={kpiVal('Order Book Value', '₫4.8T')} status="neutral" />
+        <KPICard title="On-Time Delivery" value={kpiVal('On-Time Delivery', '91%')} status="warning" />
+        <KPICard title="Active Orders" value={kpiVal('Active Orders', '1,247')} status="neutral" />
+        <KPICard title="Customers" value={kpiVal('Customers', '87')} status="neutral" />
       </div>
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <div className="lg:col-span-1">
@@ -87,9 +94,9 @@ export default function HomePage() {
   const domainTab1 = (
     <div className="space-y-6">
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <KPICard title="Avg Lead Time" value="42 days" />
-        <KPICard title="Fill Rate" value="94%" />
-        <KPICard title="Cancellation Rate" value="2.4%" />
+        <KPICard title="Avg Lead Time" value={kpiVal('Avg Lead Time', '42 days')} />
+        <KPICard title="Fill Rate" value={kpiVal('Fill Rate', '94%')} />
+        <KPICard title="Cancellation Rate" value={kpiVal('Cancellation Rate', '2.4%')} />
       </div>
       <Chart
         data={data?.detail || [{ x: 'Mon', y: 24 }, { x: 'Tue', y: 28 }, { x: 'Wed', y: 22 }, { x: 'Thu', y: 31 }, { x: 'Fri', y: 26 }, { x: 'Sat', y: 19 }, { x: 'Sun', y: 23 }]}
