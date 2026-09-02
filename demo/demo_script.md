@@ -21,8 +21,8 @@ Snowflake delivers order management intelligence for Vietnamese textile & garmen
 | Database | `VIETNAM_TEXTILE_ORDER` |
 | Service | `VIETNAM_TEXTILE_ORDER_APP` |
 | Compute pool | `SEA_DEMOS_VIETNAM_POOL` |
-| Dimension table | `RAW.DOCUMENTS` (20 rows) |
-| Fact table | `RAW.METRICS` (250,000 rows, 90 days) |
+| Dimension table | `RAW.FACTORIES` (20 rows) |
+| Fact table | `RAW.CUSTOMER_ORDERS` (250,000 rows, 90 days) |
 | Curated layer | `CURATED.PERFORMANCE_SUMMARY`, `CURATED.TREND_ANALYSIS`, `CURATED.KPI_SUMMARY` |
 | Currency | VND (₫) |
 
@@ -42,9 +42,9 @@ original literal as a fallback, so it still renders if Snowflake is unreachable.
 
 | Card | Value | Backed by |
 |---|---|---|
-| Order Book Value | `₫4.8T` | total across Documents |
+| Order Book Value | `₫4.8T` | total across Factories |
 | On-Time Delivery | `91%` | average per event |
-| Active Orders | `1,247` | total across Documents |
+| Active Orders | `1,247` | total across Factories |
 | Customers | `87` | average per event |
 | Avg Lead Time | `42 days` | average per event |
 | Fill Rate | `94%` | average per event |
