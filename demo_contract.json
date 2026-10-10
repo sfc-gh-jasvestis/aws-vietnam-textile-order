@@ -1,0 +1,67 @@
+{
+  "version": 1,
+  "repo": "aws-vietnam-textile-order",
+  "operation": "on-demand",
+  "data_classification": "synthetic demonstration only",
+  "currency": "none (volumes in thousands of garment pieces)",
+  "grains": {
+    "RAW.FACTORIES": "one row per fictional garment factory (Vietnamese city or province x product category)",
+    "RAW.FACTORY_DAILY": "one row per factory per day (90 days)",
+    "RAW.STYLE_APPROVALS": "one row per factory (PP sample approval snapshot)",
+    "CURATED.PERFORMANCE_SUMMARY": "one row per factory",
+    "CURATED.TREND_ANALYSIS": "one row per day",
+    "CURATED.SIGNAL_SUMMARY": "one row per order-risk signal",
+    "CURATED.KPI_SUMMARY": "one row per KPI",
+    "ML.LATE_RISK_SCORES": "one row per factory (latest day)"
+  },
+  "metrics": {
+    "On-Time Shipment (pieces)": "100 * SUM(ONTIME_KUNITS) / SUM(SHIPPED_KUNITS)",
+    "Order Shipments": "SUM(SHIPMENT_COUNT)",
+    "Pieces Shipped (millions)": "SUM(SHIPPED_KUNITS) / 1e3",
+    "Order Risk Flags": "SUM(FLAG_COUNT)",
+    "Confirmed Late Shipments": "SUM(CONFIRMED_COUNT)",
+    "Flag Precision": "100 * SUM(CONFIRMED_COUNT) / SUM(FLAG_COUNT)",
+    "Lots Held at Final Inspection": "SUM(LOTS_QUARANTINED)",
+    "WIP Review Completion": "100 * SUM(REVIEW_DONE) / SUM(REVIEW_DUE)",
+    "Factories Monitored": "COUNT(RAW.FACTORIES)",
+    "PP Sample Approval Coverage": "100 * SUM(LEAST(ON_FILE_QTY, REQUIRED_QTY)) / SUM(REQUIRED_QTY)",
+    "Approvals Pending": "SUM(PENDING_QTY)",
+    "Active Styles": "SUM(REQUIRED_QTY)"
+  },
+  "chart_bindings": {
+    "daily_shipments": ["CURATED.TREND_ANALYSIS.METRIC_DATE", "SHIPMENT_COUNT", "FLAG_COUNT"],
+    "flags_by_signal": ["CURATED.SIGNAL_SUMMARY.RISK_SIGNAL", "FLAG_COUNT", "CONFIRMED_COUNT"],
+    "review_vs_confirmed": ["CURATED.PERFORMANCE_SUMMARY.REVIEW_PCT", "CONFIRMED_COUNT"],
+    "quicksight_late_risk": ["ENTITY_ID", "MAX(LATE_PROB_7D)"]
+  },
+  "freshness": "MAX(EVENT_DATE) is an observation watermark; requestedAt is not freshness",
+  "required_capabilities": {
+    "core_pipeline": "Curated KPIs reconcile to a RAW recomputation (run_core.py checks this on every build)",
+    "forecast_and_anomaly": "14-day network-wide order shipment FORECAST; WIP gap ANOMALY_DETECTION (train 75 days, detect last 15)",
+    "search": "Cortex Search SEARCH.ORDER_SOP_SEARCH over synthetic order-risk follow-up SOPs (one per product category and order-risk signal)",
+    "semantic_analytics": "Semantic view APP.ORDER_ANALYTICS and Cortex Agent APP.ORDER_AGENT using analyst + search tools",
+    "grounded_ai": "Agent answers return generated SQL and SOP citations; the action memo uses only KPI, factory, order-risk signal and risk rows",
+    "quicksight": "DIRECT_QUERY dashboard (factories, daily buyer-order shipments, confirmed late shipments by factory, late-shipment risk, order-status events loaded) over an existing Snowflake data source",
+    "quicksight_q": "Amazon Q topic over the curated datasets for natural-language questions",
+    "aws_ingestion": "Amazon Data Firehose stream (Direct PUT) of buyer order-status events -> S3 (orders/) -> Snowpipe AUTO_INGEST into RAW.LIVE_ORDERS",
+    "notifications": "APP.LIVE_ORDER_ALERT logs new FLAG events to APP.ALERT_LOG and emails via SYSTEM$SEND_EMAIL; alert and tasks suspended between demos",
+    "orchestration": "Task graph APP.TASK_REFRESH_CURATED -> APP.TASK_RESCORE_RISK run on demand (EXECUTE TASK)",
+    "app_deployment": "SPCS service APP.VN_TEXTILE_ORDER_APP; routes /api/data, /api/ask, /api/agent",
+    "late_risk_model": "Snowflake ML CLASSIFICATION of P(confirmed late shipment in next 7 days) per factory, evaluated on an out-of-time holdout"
+  },
+  "builds": {
+    "snowflake": {
+      "database": "VIETNAM_TEXTILE_ORDER_SNOWFLAKE",
+      "app_setting": "DEMO_PLATFORM=snowflake",
+      "memo": "Cortex AI_COMPLETE (claude-sonnet-4-5)",
+      "live_orders": "APP.SIMULATE_ORDERS(n)"
+    },
+    "aws": {
+      "database": "VIETNAM_TEXTILE_ORDER_AWS",
+      "app_setting": "DEMO_PLATFORM=aws",
+      "memo": "Amazon Bedrock Claude Sonnet 4.5 via APP.BEDROCK_GENERATE",
+      "capabilities": "see required_capabilities",
+      "live_orders": "Amazon Data Firehose stream -> S3 -> Snowpipe"
+    }
+  }
+}

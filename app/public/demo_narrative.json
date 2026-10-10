@@ -1,0 +1,75 @@
+{
+  "title": "Garment Buyer Order Risk",
+  "duration": "6 minutes",
+  "thesis": "Every buyer purchase order at a fictional Vietnam garment factory either leaves by its ex-factory date or it does not. Snowflake turns those order shipments into on-time shipment and flag-precision KPIs, a 7-day late-shipment risk score per factory, WIP gap anomalies and grounded AI answers, all on curated dynamic tables.",
+  "tabs": [
+    {
+      "id": "executive-cockpit",
+      "persona": {"name": "Do Thi Lan", "role": "Head of Merchandising (fictional)", "avatar": ""},
+      "talking_points": [
+        "Start with the question every buyer asks the merchandising team: how many pieces left our factories by the ex-factory date? 40 garment factories across 8 Vietnamese cities and provinces, from Hanoi, Nam Dinh and Thai Binh in the north through Da Nang to Ho Chi Minh City, Binh Duong, Dong Nai and Long An in the south, making knit tops, woven shirts, denim, outerwear and sportswear.",
+        "Every KPI is a numerator over a denominator in a curated dynamic table, so it can be traced back to factory-day rows.",
+        "The order-risk signal chart shows which signals lead to confirmed late shipments and which mostly produce false-positive flags."
+      ],
+      "show": ["KPI cards", "Daily buyer-order shipments and order risk flags", "Flags by order-risk signal", "Factory table"],
+      "call_out": "One governed definition of on-time shipment, from sewing line to ex-factory",
+      "transition": {"next_tab": "predictive", "line": "Which factories should the planning team call first?"}
+    },
+    {
+      "id": "predictive",
+      "persona": {"name": "Vo Minh Khang", "role": "Production Planning Lead (fictional)", "avatar": ""},
+      "talking_points": [
+        "Snowflake ML classification ranks factories by the probability of a confirmed late shipment in the next 7 days, so follow-up goes where it matters.",
+        "The holdout line shows precision and recall on the most recent labelled days, against the base rate.",
+        "Anomaly detection flags WIP gap outliers per factory, and the forecast projects network-wide order shipments for 14 days to plan container bookings."
+      ],
+      "show": ["Holdout metrics", "Risk by factory", "Order shipment forecast", "WIP gap anomalies"],
+      "call_out": "Honest, evaluated ML inside the data platform",
+      "transition": {"next_tab": "planning", "line": "Are WIP reviews and PP sample approvals keeping up?"}
+    },
+    {
+      "id": "planning",
+      "persona": {"name": "Vo Minh Khang", "role": "Production Planning Lead (fictional)", "avatar": ""},
+      "talking_points": [
+        "WIP review completion, PP sample approval coverage and approvals still pending.",
+        "The scatter compares each factory's WIP review completion with its confirmed late shipments."
+      ],
+      "show": ["Review and approval KPIs", "WIP review completion vs confirmed late shipments"],
+      "call_out": "Close PP sample gaps before bulk cutting waits on a buyer approval",
+      "transition": {"next_tab": "live", "line": "What happens when an order falls behind plan?"}
+    },
+    {
+      "id": "live",
+      "persona": {"name": "Vo Minh Khang", "role": "Production Planning Lead (fictional)", "avatar": ""},
+      "talking_points": [
+        "Buyer order-status events land in RAW.LIVE_ORDERS: simulated in Snowflake, or sent to an Amazon Data Firehose stream, delivered to S3 and loaded by Snowpipe in the AWS build.",
+        "FLAG events (an order whose WIP gap against plan is out of tolerance) are logged by the alert, which emails the merchandising team."
+      ],
+      "show": ["Order-status events loaded", "Latest 25 order-status events", "Order risk alert log"],
+      "call_out": "From sewing-line status to order risk alert in one platform",
+      "transition": {"next_tab": "ask-ai", "line": "Now ask the data directly."}
+    },
+    {
+      "id": "ask-ai",
+      "persona": {"name": "Do Thi Lan", "role": "Head of Merchandising (fictional)", "avatar": ""},
+      "talking_points": [
+        "The Cortex Agent answers with generated SQL over the semantic view and cites the synthetic order-risk SOPs by ID.",
+        "The action memo is drafted only from KPI, factory, order-risk signal and risk rows; order risk flags are demo signals, not buyer compliance or audit verdicts."
+      ],
+      "show": ["Agent answer with SQL and SOP citations", "Action memo"],
+      "call_out": "Answers carry their SQL and SOP IDs, so nobody has to trust a number blindly",
+      "transition": {"next_tab": "architecture", "line": "Here is how it is built."}
+    },
+    {
+      "id": "architecture",
+      "persona": {"name": "Do Thi Lan", "role": "Head of Merchandising (fictional)", "avatar": ""},
+      "talking_points": [
+        "Both builds share the same core: seeded data, dynamic tables, Snowflake ML, Cortex Search, semantic view, agent, alert and task graph.",
+        "The AWS build adds an Amazon Data Firehose stream, S3 and Snowpipe ingestion, a Bedrock memo and a QuickSight dashboard with an Amazon Q topic."
+      ],
+      "show": ["Current build diagram", "Other build diagram", "Implementation status"],
+      "call_out": "Same core, two deployment options",
+      "transition": {"next_tab": "", "line": "Questions?"}
+    }
+  ]
+}
